@@ -1,7 +1,7 @@
 ![Screenshot](screenshot.png)
 Terminal used in the screenshot: [Cool Retro Term](https://github.com/Swordfish90/cool-retro-term)
 # Bad-Cli
-Another command line Bad Apple player
+Another command line Bad Apple player. \
 Original video link: https://www.youtube.com/watch?v=FtutLA63Cp8
 # Installation (Linux)
 ```console
