@@ -46,7 +46,6 @@ def play_video(stdscr, args):
         print("Error: Could not open video.")
         exit(3)
 
-    count = 0
     key = 0
     while cap.isOpened() and key != 27:  # ESC key
         success, image = cap.read()
@@ -83,7 +82,6 @@ def play_video(stdscr, args):
             stdscr.clear()
         else:
             print("\033c", end="")
-        count += 1
 
     cap.release()
 
