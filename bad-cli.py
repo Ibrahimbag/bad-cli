@@ -1,3 +1,4 @@
+import argparse
 import curses
 import cv2
 from sys import exit
@@ -5,6 +6,19 @@ from time import sleep
 from ffpyplayer.player import MediaPlayer
 
 FILE_NAME = "bad-apple.mp4"
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--curses-clear",
+        help="Uses the clear method comes with curses instead of escape sequence. "
+        "This option prevents flickering in some terminals (But causes more in most.)",
+        action="store_true",
+    )
+    return parser.parse_args()
+
 
 def init_curses():
     stdscr = curses.initscr()
@@ -24,7 +38,7 @@ def init_curses():
     return stdscr
 
 
-def play_video(stdscr):
+def play_video(stdscr, args):
     cap = cv2.VideoCapture(FILE_NAME)
     player = MediaPlayer(FILE_NAME)
 
@@ -59,13 +73,16 @@ def play_video(stdscr):
 
         frame_delay = 1 / cap.get(cv2.CAP_PROP_FPS)
         audio_frame, val = player.get_frame()
-        if val != 'eof' and audio_frame is not None:
+        if val != "eof" and audio_frame is not None:
             _, pts = audio_frame
             sleep(max(0, frame_delay - (player.get_pts() - pts)))
         else:
             sleep(frame_delay)
-            
-        stdscr.clear() #print("\033c", end="")
+
+        if args.curses_clear:
+            stdscr.clear()
+        else:
+            print("\033c", end="")
         count += 1
 
     cap.release()
@@ -78,10 +95,9 @@ def end_curses():
 
 
 def main():
+    args = parse_args()
     stdscr = init_curses()
-
-    play_video(stdscr)
-
+    play_video(stdscr, args)
     end_curses()
 
 
