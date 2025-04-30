@@ -47,27 +47,26 @@ def play_video(stdscr, args):
         exit(3)
 
     key = 0
-    while cap.isOpened() and key != 27:  # ESC key
+    while key != 27:  # ESC key
         success, image = cap.read()
-        height, width = stdscr.getmaxyx()
-
-        if success:
-            image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LINEAR)
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            for y in range(height):
-                for x in range(width):
-                    pixel_color = image[y, x]
-                    try:
-                        if pixel_color > 127:
-                            stdscr.addstr(y, x, " ", curses.color_pair(1))
-                        else:
-                            stdscr.addstr(y, x, " ", curses.color_pair(2))
-                    except curses.error:
-                        pass
-        else:
+        if not success:
             break
 
-        stdscr.refresh()
+        height, width = stdscr.getmaxyx()
+        image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LINEAR)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        for y in range(height):
+            for x in range(width):
+                pixel_color = image[y, x]
+                try:
+                    if pixel_color > 127:
+                        stdscr.addstr(y, x, " ", curses.color_pair(1))
+                    else:
+                        stdscr.addstr(y, x, " ", curses.color_pair(2))
+                except curses.error:
+                    pass
+
         key = stdscr.getch()
 
         frame_delay = 1 / cap.get(cv2.CAP_PROP_FPS)
