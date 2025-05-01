@@ -11,3 +11,5 @@ git clone https://github.com/Ibrahimbag/bad-cli.git && \
 cd bad-cli && \
 python3 bad-cli.py
 ```
+# Known Issues
+1. Video delays and audio becomes out of sync if terminal resolution is very high
